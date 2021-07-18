@@ -16,6 +16,11 @@ module.exports = {
       red: colors.rose,
       yellow: colors.yellow,
       orange: colors.orange,
+    },
+    extend: {
+      backgroundImage: theme => ({
+        'fulfilled': "url('/images/fulfilled.png')",
+      })
     }
   },
   variants: {
