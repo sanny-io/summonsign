@@ -75,3 +75,12 @@ export const DS3: Game = {
     'Slave Knight Gael': /slave|gael/i,
   }
 }
+
+export enum BossFilter {
+  Include,
+  Exclude,
+}
+
+export type Setting =
+  'bossFilter' | 'updateInterval' | 'hideFulfilledDuties' |
+  'shouldNotify' | 'playNotificationSound' | 'platforms'

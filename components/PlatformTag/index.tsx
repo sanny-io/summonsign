@@ -10,7 +10,7 @@ const platformColorMap = {
   [Platform.PC]: 'text-orange-300 border-orange-900',
   [Platform.Xbox]: 'text-green-300 border-green-800',
   [Platform.PS4]: 'text-blue-300 border-blue-800',
-  [Platform.PS5]: 'text-blue-400 border-blue-900',
+  [Platform.PS5]: 'text-white border-blue-200',
   [Platform.Switch]: 'text-red-400 border-red-700',
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Switch } from '@headlessui/react'
 
 export type CheckBoxProps = {
@@ -7,23 +7,22 @@ export type CheckBoxProps = {
   children: React.ReactNode,
   disabled?: boolean,
   className?: string,
-  onChange?(value: boolean, name?: string): any,
+  onChange?: React.Dispatch<boolean>,
 }
 
-export default function CheckBox({ children, name, className, onChange, checked = false, disabled = false }: CheckBoxProps) {
-  const [, setIsChecked] = useState<boolean>(checked)
-  const setIsCheckedWithCallback = (value: boolean) => {
-    setIsChecked(value)
+export default function CheckBox({ children, onChange, className = '', checked = false, disabled = false }: CheckBoxProps) {
+  const [isChecked, setIsChecked] = useState<boolean>(checked)
 
+  useEffect(() => {
     if (onChange) {
-      onChange(value, name)
+      onChange(isChecked)
     }
-  }
+  }, [isChecked])
 
   return (
     <Switch
-      checked={checked}
-      onChange={setIsCheckedWithCallback}
+      checked={isChecked}
+      onChange={setIsChecked}
       className={`block ${className}`}
     >
       {

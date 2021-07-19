@@ -1,26 +1,46 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { GetServerSideProps } from 'next'
 import Image from 'next/image'
 import Duty, { DutyProps } from '../components/Duty'
 import Reddit from '../providers/reddit'
 import IDutyProvider from '../providers'
 import firebase from '../firebase'
-import Settings, { BossFilter, SettingsProps } from '../components/Settings'
-import { Platform } from '../types'
+import Settings, { SettingsProps } from '../components/Settings'
+import { Platform, BossFilter, Setting } from '../types'
 import admin from '../admin'
 import nookies from 'nookies'
 import { SettingsContext } from '../state'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { useWriteBatch } from '../util'
 
 export type HomeProps = {
   duties: DutyProps[],
   settings: SettingsProps,
 }
 
-export default function Home({ duties, settings }: HomeProps) {
+export default function Home(props: HomeProps) {
+  const [duties, setDuties] = useState<DutyProps[]>(props.duties)
+  const [settings, setSettings] = useState<SettingsProps>(props.settings)
+  const [user] = useAuthState(firebase.auth())
+  const batch = useWriteBatch(firebase.firestore(), 5000)
+  const echoSound = useRef<HTMLAudioElement>(null)
+  const reddit = new Reddit()
+
+  const updateSetting = async (setting: Setting, value: any) => {
+    console.log(`${setting} = ${value}`)
+    setSettings({ ...settings, [setting]: value })
+
+    if (user) {
+      batch.set(firebase.firestore().doc(`settings/${user.uid}`), { [setting]: value }, { merge: true })
+    }
+  }
+
   useEffect(() => {
     (async () => {
-      const timer = setInterval(() => console.log('hey'), settings.updateInterval * 1000)
       const credentials = await firebase.auth().signInAnonymously()
+      const dutyRefreshTimer = setInterval(async () => {
+        setDuties(await reddit.getDuties())
+      }, settings.updateInterval * 1000)
 
       nookies.set(
         undefined,
@@ -29,18 +49,18 @@ export default function Home({ duties, settings }: HomeProps) {
         { path: '/', expires: new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 365 * 10)) }
       )
 
-      return () => clearInterval(timer)
+      return () => clearInterval(dutyRefreshTimer)
     })()
   }, [])
 
   return (
-    <SettingsContext.Provider value={settings}>
+    <SettingsContext.Provider value={{ settings, updateSetting }}>
       <main>
         <div className="container flex flex-col items-center px-4 py-32 mx-auto">
           <Image src="/images/logo.png" alt="Summon Sign logo" width="620" height="100" />
           <h1 className="mb-8 text-2xl">Be summoned to another world.</h1>
 
-          <Settings {...settings} />
+          <Settings />
 
           <ol className="w-full space-y-8">
             {
@@ -48,6 +68,8 @@ export default function Home({ duties, settings }: HomeProps) {
             }
           </ol>
         </div>
+
+        <audio src="/audio/echo.mp3" ref={echoSound} />
       </main>
 
     </SettingsContext.Provider>

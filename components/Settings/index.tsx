@@ -1,10 +1,6 @@
-import React, { useRef, useEffect, useState, useContext } from 'react'
+import React, { useContext } from 'react'
 import CheckBox from '../CheckBox'
-import useLocalStorage from 'use-local-storage'
-import { Platform } from '../../types'
-import Loading from '../Loading'
-import firebase from '../../firebase'
-import { useAuthState } from 'react-firebase-hooks/auth'
+import { Platform, BossFilter } from '../../types'
 import { SettingsContext } from '../../state'
 
 export type SettingsProps = {
@@ -16,15 +12,6 @@ export type SettingsProps = {
   platforms: Platform[],
 }
 
-export enum BossFilter {
-  Include,
-  Exclude,
-}
-
-export type Setting =
-  'bossFilter' | 'updateInterval' | 'hideFulfilledDuties' |
-  'shouldNotify' | 'playNotificationSound' | 'platforms'
-
 const includeBossFilter = (bosses: string[], boss: string) => bosses.includes(boss)
 const excludeBossFilter = (bosses: string[], boss: string) => !bosses.includes(boss)
 
@@ -33,23 +20,8 @@ const bossFilters = {
   [BossFilter.Exclude]: excludeBossFilter,
 }
 
-export default function Settings(props: SettingsProps) {
-  const [settings, setSettings] = useState<SettingsProps>(props)
-  const [user] = useAuthState(firebase.auth())
-  const context = useContext(SettingsContext)
-
-  console.log('CONTEXT IS', context)
-
-  const updateSetting = (setting: Setting, value: any) => {
-    setSettings({ ...settings, [setting]: value })
-
-    if (user) {
-      firebase
-        .firestore()
-        .doc(`settings/${user.uid}`)
-        .set({ [setting]: value }, { merge: true })
-    }
-  }
+export default function Settings() {
+  const { settings, updateSetting } = useContext(SettingsContext)
 
   return (
     <div className="w-full mb-6">

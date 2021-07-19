@@ -1,4 +1,5 @@
 import firebase from 'firebase/app'
+import 'firebase/app-check'
 import 'firebase/auth'
 import 'firebase/firestore'
 
@@ -17,6 +18,9 @@ if (firebase.apps.length === 0) {
     firebase.auth().useEmulator('http://localhost:9099')
     firebase.firestore().useEmulator('localhost', 8080)
   }
+
+  const appCheck = firebase.appCheck();
+  appCheck.activate('6LdnUqYbAAAAAC4niczmrTKNFf9Up2_-r5M2KO7C')
 
   // if (typeof window !== undefined) {
   //   firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)

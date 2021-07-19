@@ -20,7 +20,6 @@ specifiers:
   react-markdown: ^6.0.2
   tailwindcss: ^2.2.4
   typescript: ^4.3.5
-  use-local-storage: ^2.2.1
 
 dependencies:
   '@headlessui/react': 1.3.0_react-dom@17.0.2+react@17.0.2
@@ -38,7 +37,6 @@ dependencies:
   react-firebase-hooks: 3.0.4_firebase@8.7.1+react@17.0.2
   react-markdown: 6.0.2_43559efe81628b42e1e465743e6a3ffa
   tailwindcss: 2.2.4_72be89de93206f86f2d67dd5290ec14d
-  use-local-storage: 2.2.1_react@17.0.2
 
 devDependencies:
   '@types/node': 16.0.0
@@ -4348,14 +4346,6 @@ packages:
     dependencies:
       punycode: 1.3.2
       querystring: 0.2.0
-    dev: false
-
-  /use-local-storage/2.2.1_react@17.0.2:
-    resolution: {integrity: sha512-3m+3c/J4mXkp6vXaVL0XrAWYVBFGOf1ha/oSYcVdR8NOkvLAT0uJWHEJhv3dvZbQLzW9+8gFVsEbUPtSXGChlA==}
-    peerDependencies:
-      react: '>=16.8.1'
-    dependencies:
-      react: 17.0.2
     dev: false
 
   /use-subscription/1.5.1_react@17.0.2:
