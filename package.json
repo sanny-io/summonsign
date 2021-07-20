@@ -8,7 +8,7 @@
     "dev": "NODE_OPTIONS='--inspect' FIREBASE_AUTH_EMULATOR_HOST='localhost:9099' FIRESTORE_EMULATOR_HOST='localhost:8080' concurrently \"npm:dev:*\"",
     "dev:next": "next dev",
     "dev:firebase": "firebase emulators:start",
-    "build": "next build && next export",
+    "build": "next build",
     "start": "next start"
   },
   "dependencies": {
