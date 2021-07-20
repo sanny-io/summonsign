@@ -8,6 +8,7 @@
   #__next {
     @apply h-full;
     @apply bg-black;
+    @apply text-white;
   }
 
   #__next {
@@ -23,7 +24,16 @@
   }
 
   a:hover {
-    @apply text-blue-700;
+    @apply text-blue-500;
+  }
+
+  *:focus {
+    @apply outline-none focus:ring focus:border-blue-500;
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    @apply bg-gray-800;
   }
 
   .markdown h1 {
