@@ -15,6 +15,15 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { doLogin, useWriteBatch } from '../util'
 import Loading from '../components/Loading'
 
+const defaultSettings = {
+  bossFilter: BossFilter.Include,
+  updateInterval: 10,
+  hideFulfilledDuties: false,
+  shouldNotify: false,
+  playNotificationSound: false,
+  platforms: [Platform.PC, Platform.Xbox, Platform.PS4, Platform.PS5, Platform.Switch],
+}
+
 export type HomeProps = {
   duties: DutyProps[],
   settings: SettingsProps,
@@ -79,15 +88,7 @@ export default function Home(props: HomeProps) {
 export const getServerSideProps: GetServerSideProps<HomeProps> = async (context) => {
   const provider: IDutyProvider = new Reddit()
   const cookies = nookies.get(context)
-
-  let settings = {
-    bossFilter: BossFilter.Include,
-    updateInterval: 10,
-    hideFulfilledDuties: false,
-    shouldNotify: false,
-    playNotificationSound: false,
-    platforms: [Platform.PC, Platform.Xbox, Platform.PS4, Platform.PS5, Platform.Switch],
-  }
+  let settings = defaultSettings
 
   if (cookies.token) {
     try {
