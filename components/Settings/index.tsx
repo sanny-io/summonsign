@@ -1,7 +1,9 @@
 import React, { useContext } from 'react'
-import CheckBox from '../CheckBox'
+import { CheckBox, TextBox, TagTextBox } from '../Inputs'
 import { Platform, BossFilter } from '../../types'
 import { SettingsContext } from '../../state'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import firebase from 'firebase'
 
 export type SettingsProps = {
   bossFilter: BossFilter,
@@ -22,9 +24,14 @@ const bossFilters = {
 
 export default function Settings() {
   const { settings, updateSetting } = useContext(SettingsContext)
+  const [user] = useAuthState(firebase.auth())
 
   return (
     <div className="w-full mb-6">
+      <TagTextBox
+        className="mb-4"
+        placeholder="Platforms" />
+
       <CheckBox
         checked={settings.hideFulfilledDuties}
         onChange={v => updateSetting('hideFulfilledDuties', v)}
@@ -51,16 +58,19 @@ export default function Settings() {
       <span>
         Check for new duties every
 
-        <input
+        <TextBox
           type="number"
           className="w-[100px] pl-2 mx-2"
-          value={settings.updateInterval}
-          onChange={e => updateSetting('updateInterval', Number(e.target.value))}
-          min={10}
+          value={settings.updateInterval.toString()}
+          onChange={value => updateSetting('updateInterval', Number(value))}
         />
 
         seconds
       </span>
+
+      {
+        !user && <span className="block mt-4">Login to save your settings.</span>
+      }
     </div>
   )
 }

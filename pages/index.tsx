@@ -9,9 +9,11 @@ import Settings, { SettingsProps } from '../components/Settings'
 import { Platform, BossFilter, Setting } from '../types'
 import admin from '../admin'
 import nookies from 'nookies'
+import Footer from '../components/Footer'
 import { SettingsContext } from '../state'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { useWriteBatch } from '../util'
+import { doLogin, useWriteBatch } from '../util'
+import Loading from '../components/Loading'
 
 export type HomeProps = {
   duties: DutyProps[],
@@ -21,7 +23,7 @@ export type HomeProps = {
 export default function Home(props: HomeProps) {
   const [duties, setDuties] = useState<DutyProps[]>(props.duties)
   const [settings, setSettings] = useState<SettingsProps>(props.settings)
-  const [user] = useAuthState(firebase.auth())
+  const [user, loadingUser] = useAuthState(firebase.auth())
   const batch = useWriteBatch(firebase.firestore(), 5000)
   const echoSound = useRef<HTMLAudioElement>(null)
   const reddit = new Reddit()
@@ -37,17 +39,9 @@ export default function Home(props: HomeProps) {
 
   useEffect(() => {
     (async () => {
-      const credentials = await firebase.auth().signInAnonymously()
       const dutyRefreshTimer = setInterval(async () => {
         setDuties(await reddit.getDuties())
       }, settings.updateInterval * 1000)
-
-      nookies.set(
-        undefined,
-        'token',
-        await credentials?.user?.getIdToken() || '',
-        { path: '/', expires: new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 365 * 10)) }
-      )
 
       return () => clearInterval(dutyRefreshTimer)
     })()
@@ -60,6 +54,12 @@ export default function Home(props: HomeProps) {
           <Image src="/images/logo.png" alt="Summon Sign logo" width="620" height="100" />
           <h1 className="mb-8 text-2xl">Be summoned to another world.</h1>
 
+          {
+            loadingUser ? <Loading className="mb-6" /> : user ? <span className="mb-6">{user.uid}</span>
+              :
+              <button onClick={doLogin} className="p-2 mb-6 bg-blue-700">Sign in through reddit</button>
+          }
+
           <Settings />
 
           <ol className="w-full space-y-8">
@@ -71,7 +71,7 @@ export default function Home(props: HomeProps) {
 
         <audio src="/audio/echo.mp3" ref={echoSound} />
       </main>
-
+      <Footer />
     </SettingsContext.Provider>
   )
 }

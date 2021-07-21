@@ -10,7 +10,7 @@ export type CheckBoxProps = {
   onChange?: React.Dispatch<boolean>,
 }
 
-export default function CheckBox({ children, onChange, className = '', checked = false, disabled = false }: CheckBoxProps) {
+export function CheckBox({ children, onChange, className = '', checked = false, disabled = false }: CheckBoxProps) {
   const [isChecked, setIsChecked] = useState<boolean>(checked)
 
   useEffect(() => {
