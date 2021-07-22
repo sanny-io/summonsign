@@ -14,20 +14,12 @@ export type SettingsProps = {
   platforms: Platform[],
 }
 
-const includeBossFilter = (bosses: string[], boss: string) => bosses.includes(boss)
-const excludeBossFilter = (bosses: string[], boss: string) => !bosses.includes(boss)
-
-const bossFilters = {
-  [BossFilter.Include]: includeBossFilter,
-  [BossFilter.Exclude]: excludeBossFilter,
-}
-
 export default function Settings() {
   const { settings, updateSetting } = useContext(SettingsContext)
   const [user] = useAuthState(firebase.auth())
 
   return (
-    <div className="w-full mb-6">
+    <div className="w-full my-6 text-left">
       <TagTextBox
         className="mb-4"
         placeholder="Platforms" />

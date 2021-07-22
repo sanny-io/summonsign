@@ -1,8 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import base64 from 'base-64'
 import snoowrap from 'snoowrap'
-import admin from '../../admin'
+import admin from '../../../admin'
 import FormData from 'form-data'
+import { getRedditInstance } from '../../../util'
 
 type AuthProps = {
   customToken: string,
@@ -33,15 +34,10 @@ export default async (request: NextApiRequest, response: NextApiResponse<AuthPro
   const json = await redditResponse.json()
   const { refresh_token: redditRefreshToken } = json
 
-  const reddit = new snoowrap({
-    refreshToken: redditRefreshToken,
-    userAgent: 'Summon Sign',
-    clientId: process.env.NEXT_PUBLIC_REDDIT_CLIENT_ID,
-    clientSecret: '',
-  })
+  const reddit = getRedditInstance(redditRefreshToken)
 
   // @ts-ignore
-  const redditUser = await reddit.getMe()
+  const redditUser: snoowrap.RedditUser = await reddit.getMe()
   const customToken = await admin.auth().createCustomToken(redditUser.name, { redditRefreshToken })
 
   console.log(`${redditUser.name} signed in.`)

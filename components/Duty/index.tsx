@@ -21,16 +21,16 @@ export default function Duty(props: DutyProps) {
 
   return (
     <div className={`p-4 bg-gray-900 ${isFulfilled && 'bg-fulfilled bg-no-repeat bg-center opacity-50'}`}>
-      <div className="flex w-full mb-4 text-2xl">
+      <div className="flex w-full mb-4 text-sm md:text-xl lg:text-2xl">
         <PlatformTag platform={platform} />
 
         <a href={url}>
-          <h2 className="mr-6 overflow-hidden text-2xl font-bold overflow-ellipsis">
+          <h2 className="mr-6 overflow-hidden font-bold overflow-ellipsis">
             {title}
           </h2>
         </a>
 
-        <span className="ml-auto text-base text-gray-300">{dayjs().to(dayjs.unix(lastUpdated))}</span>
+        <span className="ml-auto text-gray-300 md:text-base">{dayjs().to(dayjs.unix(lastUpdated))}</span>
       </div>
 
       <InfoBox duty={props} />

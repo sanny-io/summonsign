@@ -1,3 +1,7 @@
+import snoowrap from 'snoowrap'
+import type { NextApiRequest, NextApiResponse, GetServerSidePropsContext } from 'next'
+import { ParsedUrlQuery } from 'querystring'
+
 export enum Platform {
   None,
   PC = 1 << 1,
@@ -7,6 +11,12 @@ export enum Platform {
   Switch = 1 << 5,
   All = PC | Xbox | PS4 | PS5 | Switch,
 }
+
+export type SummonSignApiRequest = NextApiRequest & React.Dispatch<string> & {
+  reddit: snoowrap,
+}
+
+export type SummonSignApiHandler<T> = (request: SummonSignApiRequest, response: NextApiResponse<T>) => void
 
 export type Game = {
   name: string,

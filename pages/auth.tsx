@@ -2,8 +2,7 @@ import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import firebase from '../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import nookies from 'nookies'
-import Loading from '../components/Loading'
+import Spinner from '../components/Spinner'
 
 export default function Auth() {
   const router = useRouter()
@@ -13,11 +12,16 @@ export default function Auth() {
   useEffect(() => {
     (async () => {
       if (user) {
-        nookies.set(
-          undefined,
-          'token',
-          await user.getIdToken() || '',
-          { path: '/', expires: new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 365 * 10)) }
+        await fetch(
+          '/api/auth/session',
+          {
+            method: 'POST',
+            body: JSON.stringify(
+              {
+                idToken: await user.getIdToken()
+              }
+            )
+          }
         )
 
         router.push('/')
@@ -38,7 +42,7 @@ export default function Auth() {
 
   return (
     <div className="flex items-center justify-center w-screen h-screen bg-black">
-      <Loading className="w-32 h-32" />
+      <Spinner className="w-32 h-32" />
     </div>
   )
 }

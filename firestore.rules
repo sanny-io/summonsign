@@ -1,12 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isValidSetting() {
-      return request.resource.data.diff(resource.data).affectedKeys()
-        .hasOnly([
-          'bossFilter', 'updateInterval', 'hideFulfilledDuties',
-          'shouldNotify', 'playNotificationSound', 'platforms'
-        ]);
+    match /users/{uid} {
+      allow read: if request.auth != null;
+      allow write: if false;
     }
 
     match /settings/{uid} {

@@ -1,6 +1,7 @@
 import '../index.css'
 import '../firebase'
 import Head from 'next/head'
+import AuthProvider from '../components/AuthProvider'
 import { AppProps } from 'next/app'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
@@ -12,7 +13,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="theme-color" content="#FFFFFF" />
       </Head>
 
-      <Component {...pageProps} />
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
     </>
   )
 }

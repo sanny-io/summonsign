@@ -10,10 +10,13 @@ import { Platform, BossFilter, Setting } from '../types'
 import admin from '../admin'
 import nookies from 'nookies'
 import Footer from '../components/Footer'
+import logo from '../public/images/logo.png'
 import { SettingsContext } from '../state'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { doLogin, useWriteBatch } from '../util'
-import Loading from '../components/Loading'
+import { doLogin, getRedditInstance, useWriteBatch } from '../util'
+import Spinner from '../components/Spinner'
+
+const karmaPattern = /\+(\d+) Karma/
 
 const defaultSettings = {
   bossFilter: BossFilter.Include,
@@ -24,6 +27,14 @@ const defaultSettings = {
   platforms: [Platform.PC, Platform.Xbox, Platform.PS4, Platform.PS5, Platform.Switch],
 }
 
+const includeBossFilter = (bosses: string[], boss: string) => bosses.includes(boss)
+const excludeBossFilter = (bosses: string[], boss: string) => !bosses.includes(boss)
+
+const bossFilters = {
+  [BossFilter.Include]: includeBossFilter,
+  [BossFilter.Exclude]: excludeBossFilter,
+}
+
 export type HomeProps = {
   duties: DutyProps[],
   settings: SettingsProps,
@@ -31,6 +42,7 @@ export type HomeProps = {
 
 export default function Home(props: HomeProps) {
   const [duties, setDuties] = useState<DutyProps[]>(props.duties)
+  const [visibleDuties, setVisibleDuties] = useState<DutyProps[]>(props.duties)
   const [settings, setSettings] = useState<SettingsProps>(props.settings)
   const [user, loadingUser] = useAuthState(firebase.auth())
   const batch = useWriteBatch(firebase.firestore(), 5000)
@@ -47,39 +59,56 @@ export default function Home(props: HomeProps) {
   }
 
   useEffect(() => {
-    (async () => {
-      const dutyRefreshTimer = setInterval(async () => {
-        setDuties(await reddit.getDuties())
-      }, settings.updateInterval * 1000)
+    if (settings.hideFulfilledDuties) {
+      setVisibleDuties(duties.filter(duty => !duty.isFulfilled))
+    }
+    else {
+      setVisibleDuties(duties)
+    }
+  }, [settings.hideFulfilledDuties, duties])
 
-      return () => clearInterval(dutyRefreshTimer)
-    })()
-  }, [])
+  useEffect(() => {
+    const dutyRefreshTimer = setInterval(async () => {
+      console.log('Refresh')
+      setDuties(await reddit.getDuties())
+    }, settings.updateInterval * 1000)
+
+    return () => clearInterval(dutyRefreshTimer)
+  }, [settings.updateInterval])
 
   return (
     <SettingsContext.Provider value={{ settings, updateSetting }}>
       <main>
-        <div className="container flex flex-col items-center px-4 py-32 mx-auto">
-          <Image src="/images/logo.png" alt="Summon Sign logo" width="620" height="100" />
+        <div className="container h-full px-4 py-32 mx-auto text-center">
+          <Image src={logo} alt="Summon Sign logo" layout="intrinsic" />
           <h1 className="mb-8 text-2xl">Be summoned to another world.</h1>
 
           {
-            loadingUser ? <Loading className="mb-6" /> : user ? <span className="mb-6">{user.uid}</span>
-              :
-              <button onClick={doLogin} className="p-2 mb-6 bg-blue-700">Sign in through reddit</button>
+            loadingUser
+              ? <Spinner className="w-6 h-6 mb-6" /> : user ? <span className="mb-8">{user.uid}</span>
+                : <button onClick={doLogin} className="p-2 mb-6 bg-blue-700">Sign in through reddit</button>
           }
 
           <Settings />
 
-          <ol className="w-full space-y-8">
-            {
-              duties.map((duty, index) => <li key={index}><Duty {...duty} /></li>)
-            }
-          </ol>
+          {
+            visibleDuties.length > 0
+              ? <ol className="w-full space-y-8 text-left">
+                {
+                  visibleDuties.map((duty, index) => <li key={index}><Duty {...duty} /></li>)
+                }
+              </ol>
+              : (
+                <div className="flex items-center justify-center w-full h-52">
+                  <span>Rest, Ashen One, for there are no duties matching your criteria.</span>
+                </div>
+              )
+          }
         </div>
 
         <audio src="/audio/echo.mp3" ref={echoSound} />
       </main>
+
       <Footer />
     </SettingsContext.Provider>
   )
@@ -90,10 +119,26 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (context)
   const cookies = nookies.get(context)
   let settings = defaultSettings
 
-  if (cookies.token) {
+  if (cookies.session) {
     try {
-      const decodedToken = await admin.auth().verifyIdToken(cookies.token)
-      const { uid } = decodedToken
+      const decodedToken = await admin.auth().verifySessionCookie(cookies.session)
+      const { uid, redditRefreshToken } = decodedToken
+      const reddit = getRedditInstance(redditRefreshToken)
+      const { flair_text: flair } = await reddit.getSubreddit('summonsign').getMyFlair()
+
+      if (flair) {
+        const karmaMatch = flair.match(karmaPattern)
+
+        if (karmaMatch) {
+          const karma = Number(karmaMatch[1])
+
+          await admin
+            .firestore()
+            .doc(`users/${uid}`)
+            .set({ karma }, { merge: true })
+        }
+      }
+
       const settingsDocument = await admin
         .firestore()
         .doc(`settings/${uid}`)
@@ -103,7 +148,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (context)
     }
 
     catch (e) {
-      console.error('Could not verify token.')
+
     }
   }
 

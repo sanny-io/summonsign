@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import firebase from './firebase'
+import { SummonSignApiHandler, SummonSignApiRequest } from './types'
+import snoowrap from 'snoowrap'
+import type { NextApiResponse } from 'next'
 // import Bowser from 'bowser'
 
 // const browser = Bowser.getParser(window.navigator.userAgent)
@@ -37,6 +40,21 @@ export function getLoginUrl() {
 
 export function doLogin() {
   window.location.href = getLoginUrl()
+}
+
+export function withSummonSign<T>(handler: SummonSignApiHandler<T>) {
+  return async (request: SummonSignApiRequest, response: NextApiResponse<T>) => {
+    handler(request, response)
+  }
+}
+
+export const getRedditInstance = (redditRefreshToken: string): snoowrap => {
+  return new snoowrap({
+    refreshToken: redditRefreshToken,
+    userAgent: 'Summon Sign',
+    clientId: process.env.NEXT_PUBLIC_REDDIT_CLIENT_ID,
+    clientSecret: '',
+  })
 }
 
 export { dayjs }
