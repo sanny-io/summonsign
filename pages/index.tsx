@@ -48,6 +48,7 @@ export default function Home(props: HomeProps) {
   const batch = useWriteBatch(firebase.firestore(), 5000)
   const echoSound = useRef<HTMLAudioElement>(null)
   const reddit = new Reddit()
+  const seenDuties = useRef<Record<string, boolean>>({})
 
   const updateSetting = async (setting: Setting, value: any) => {
     console.log(`${setting} = ${value}`)
@@ -57,6 +58,31 @@ export default function Home(props: HomeProps) {
       batch.set(firebase.firestore().doc(`settings/${user.uid}`), { [setting]: value }, { merge: true })
     }
   }
+
+  useEffect(() => {
+    const newDuties = [] as DutyProps[]
+
+    visibleDuties.forEach(duty => {
+      if (!seenDuties.current[duty.id]) {
+        seenDuties.current[duty.id] = true
+        newDuties.push(duty)
+      }
+    })
+
+    // If there's 25 new duties, it's probably our first render.
+    if (newDuties.length > 0 && newDuties.length < 25) {
+      if (settings.shouldNotify) {
+        const firstUnseenDuty = newDuties[newDuties.length - 1]
+        const notification = new Notification(firstUnseenDuty.title, { body: firstUnseenDuty.content })
+
+        notification.onclick = () => window.open(firstUnseenDuty.url)
+
+        if (settings.playNotificationSound) {
+          echoSound.current?.play()
+        }
+      }
+    }
+  }, [visibleDuties])
 
   useEffect(() => {
     if (settings.hideFulfilledDuties) {
@@ -80,7 +106,12 @@ export default function Home(props: HomeProps) {
     <SettingsContext.Provider value={{ settings, updateSetting }}>
       <main>
         <div className="container h-full px-4 py-32 mx-auto text-center">
-          <Image src={logo} alt="Summon Sign logo" layout="intrinsic" />
+          <Image
+            src={logo}
+            alt="Summon Sign logo"
+            layout="intrinsic"
+          />
+
           <h1 className="mb-8 text-2xl">Be summoned to another world.</h1>
 
           {
@@ -117,7 +148,7 @@ export default function Home(props: HomeProps) {
 export const getServerSideProps: GetServerSideProps<HomeProps> = async (context) => {
   const provider: IDutyProvider = new Reddit()
   const cookies = nookies.get(context)
-  let settings = defaultSettings
+  let settings = { ...defaultSettings }
 
   if (cookies.session) {
     try {
@@ -144,7 +175,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (context)
         .doc(`settings/${uid}`)
         .get()
 
-      settings = { ...settings, ...settingsDocument.data() as SettingsProps }
+      settings = settingsDocument.data() as SettingsProps
     }
 
     catch (e) {

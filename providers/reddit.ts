@@ -9,6 +9,7 @@ type RedditResponse = {
     selftext: string,
     created_utc: string,
     link_flair_css_class: string,
+    id: string,
   }
 }
 
@@ -40,7 +41,7 @@ export default class Reddit implements IDutyProvider {
     const json = await response.json()
 
     const duties: DutyProps[] = json.data.children.map((duty: RedditResponse) => {
-      let { title, url, selftext: content, created_utc: lastUpdated } = duty.data
+      let { title, url, selftext: content, created_utc: lastUpdated, id } = duty.data
       const platform = determinePlatform(title)
       const isFulfilled = duty.data.link_flair_css_class == 'duty-fulfilled'
       const bossMatches = Array<[string, RegExpMatchArray | null]>()
@@ -62,7 +63,7 @@ export default class Reddit implements IDutyProvider {
         dutyBoss = bossMatches[0][0]
       }
 
-      return { title, url, content, platform, lastUpdated, isFulfilled, boss: dutyBoss }
+      return { title, url, content, platform, lastUpdated, isFulfilled, id, boss: dutyBoss }
     })
 
     return duties

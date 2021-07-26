@@ -14,6 +14,7 @@ export type DutyProps = {
   boss?: string,
   soulLevel?: number,
   isFulfilled: boolean,
+  id: string,
 }
 
 export default function Duty(props: DutyProps) {
@@ -25,12 +26,12 @@ export default function Duty(props: DutyProps) {
         <PlatformTag platform={platform} />
 
         <a href={url}>
-          <h2 className="mr-6 overflow-hidden font-bold overflow-ellipsis">
+          <h2 className="mr-6 font-bold">
             {title}
           </h2>
         </a>
 
-        <span className="ml-auto text-gray-300 md:text-base">{dayjs().to(dayjs.unix(lastUpdated))}</span>
+        <span className="ml-auto text-gray-300 md:text-base whitespace-nowrap">{dayjs().to(dayjs.unix(lastUpdated))}</span>
       </div>
 
       <InfoBox duty={props} />
