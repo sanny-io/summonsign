@@ -18,7 +18,7 @@ if (firebase.apps.length === 0) {
     firebase.firestore().useEmulator('localhost', 8080)
   }
 
-  if (typeof window !== undefined) {
+  if (typeof window !== 'undefined') {
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
   }
 }
