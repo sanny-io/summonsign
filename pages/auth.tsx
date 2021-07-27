@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import firebase from '../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import Spinner from '../components/Spinner'
+import { Route } from '../types'
 
 export default function Auth() {
   const router = useRouter()
@@ -13,7 +14,7 @@ export default function Auth() {
     (async () => {
       if (user) {
         await fetch(
-          '/api/auth/session',
+          Route.AuthCreateSession,
           {
             method: 'POST',
             body: JSON.stringify(
@@ -24,7 +25,7 @@ export default function Auth() {
           }
         )
 
-        router.push('/')
+        router.push(Route.HomePage)
       }
     })()
   }, [user])
@@ -32,7 +33,14 @@ export default function Auth() {
   useEffect(() => {
     (async () => {
       if (redditAccessToken) {
-        const loginResponse = await fetch('/api/auth', { method: 'POST', body: JSON.stringify({ redditAccessToken }) })
+        const loginResponse = await fetch(
+          Route.Auth,
+          {
+            method: 'POST',
+            body: JSON.stringify({ redditAccessToken })
+          }
+        )
+
         const { customToken } = await loginResponse.json()
 
         await firebase.auth().signInWithCustomToken(customToken)

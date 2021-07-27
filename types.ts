@@ -1,6 +1,5 @@
 import snoowrap from 'snoowrap'
-import type { NextApiRequest, NextApiResponse, GetServerSidePropsContext } from 'next'
-import { ParsedUrlQuery } from 'querystring'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 export enum Platform {
   None,
@@ -10,6 +9,13 @@ export enum Platform {
   PS5 = 1 << 4,
   Switch = 1 << 5,
   All = PC | Xbox | PS4 | PS5 | Switch,
+}
+
+export enum Route {
+  HomePage = '/',
+  AuthPage = '/auth',
+  Auth = '/api/auth',
+  AuthCreateSession = '/api/auth/session',
 }
 
 export type SummonSignApiRequest = NextApiRequest & React.Dispatch<string> & {
@@ -92,5 +98,9 @@ export enum BossFilter {
 }
 
 export type Setting =
-  'bossFilter' | 'updateInterval' | 'hideFulfilledDuties' |
-  'shouldNotify' | 'playNotificationSound' | 'platforms'
+  'bossFilter'
+  | 'updateInterval'
+  | 'hideFulfilledDuties'
+  | 'shouldNotify'
+  | 'playNotificationSound'
+  | 'platforms'

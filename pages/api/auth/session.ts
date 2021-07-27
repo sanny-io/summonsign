@@ -37,4 +37,6 @@ export default async (request: SummonSignApiRequest, response: NextApiResponse<S
   catch (e) {
     console.log('Could not create cookie.')
   }
+
+  return response.status(500).end()
 }

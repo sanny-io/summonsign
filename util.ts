@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import firebase from './firebase'
-import { SummonSignApiHandler, SummonSignApiRequest } from './types'
+import { Route, SummonSignApiHandler, SummonSignApiRequest } from './types'
 import snoowrap from 'snoowrap'
 import type { NextApiResponse } from 'next'
 // import Bowser from 'bowser'
@@ -35,7 +35,7 @@ export function useWriteBatch(firestore: firebase.firestore.Firestore, ms: numbe
 }
 
 export function getLoginUrl() {
-  return `https://reddit.com/api/v1/authorize?client_id=${process.env.NEXT_PUBLIC_REDDIT_CLIENT_ID}&scope=identity,flair&redirect_uri=${process.env.NEXT_PUBLIC_BASE_URL}/auth&response_type=code&state=0&duration=permanent`
+  return `https://reddit.com/api/v1/authorize?client_id=${process.env.NEXT_PUBLIC_REDDIT_CLIENT_ID}&scope=identity,flair&redirect_uri=${process.env.NEXT_PUBLIC_BASE_URL}/${Route.AuthPage}&response_type=code&state=0&duration=permanent`
 }
 
 export function doLogin() {
