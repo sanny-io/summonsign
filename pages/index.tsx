@@ -175,7 +175,9 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (context)
         .doc(`settings/${uid}`)
         .get()
 
-      settings = settingsDocument.data() as SettingsProps
+      if (settingsDocument.exists) {
+        settings = settingsDocument.data() as SettingsProps
+      }
     }
 
     catch (e) {

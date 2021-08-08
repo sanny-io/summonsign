@@ -21,7 +21,7 @@ export default async (request: NextApiRequest, response: NextApiResponse<AuthPro
 
   formData.append('grant_type', 'authorization_code')
   formData.append('code', redditAccessToken)
-  formData.append('redirect_uri', `${process.env.NEXT_PUBLIC_BASE_URL}/${Route.AuthPage}`)
+  formData.append('redirect_uri', `${process.env.NEXT_PUBLIC_BASE_URL}${Route.AuthPage}`)
 
   headers.append('Authorization', 'Basic ' + base64.encode(`${process.env.NEXT_PUBLIC_REDDIT_CLIENT_ID}:`))
 
