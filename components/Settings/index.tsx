@@ -61,7 +61,7 @@ export default function Settings() {
       </span>
 
       {
-        !user && <span className="block mt-4">Login to save your settings.</span>
+        !user && <span className="block mt-4">Sign in to save your settings.</span>
       }
     </div>
   )

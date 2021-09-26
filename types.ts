@@ -1,5 +1,6 @@
 import snoowrap from 'snoowrap'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { SettingsProps } from './components/Settings'
 
 export enum Platform {
   None,
@@ -97,10 +98,4 @@ export enum BossFilter {
   Exclude,
 }
 
-export type Setting =
-  'bossFilter'
-  | 'updateInterval'
-  | 'hideFulfilledDuties'
-  | 'shouldNotify'
-  | 'playNotificationSound'
-  | 'platforms'
+export type Setting = keyof SettingsProps
