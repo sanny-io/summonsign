@@ -20,9 +20,9 @@ export default function Settings() {
 
   return (
     <div className="w-full my-6 text-left">
-      <TagTextBox
+      {/* <TagTextBox
         className="mb-4"
-        placeholder="Platforms" />
+        placeholder="Platforms" /> */}
 
       <CheckBox
         checked={settings.hideFulfilledDuties}
