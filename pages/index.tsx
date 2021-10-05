@@ -51,7 +51,6 @@ export default function Home(props: HomeProps) {
   const seenDuties = useRef<Record<string, boolean>>({})
 
   const updateSetting = async (setting: Setting, value: any) => {
-    console.log(`${setting} = ${value}`)
     setSettings({ ...settings, [setting]: value })
 
     if (user) {
@@ -95,7 +94,6 @@ export default function Home(props: HomeProps) {
 
   useEffect(() => {
     const dutyRefreshTimer = setInterval(async () => {
-      console.log('Refresh')
       setDuties(await reddit.getDuties())
     }, settings.updateInterval * 1000)
 
