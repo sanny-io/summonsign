@@ -25,8 +25,8 @@ export default function Duty(props: DutyProps) {
       <div className="flex flex-wrap w-full mb-4 text-sm md:flex-nowrap md:text-xl lg:text-2xl">
         <PlatformTag platform={platform} />
 
-        <a href={url} className="order-3 w-full mt-2 md:mt-0 md:order-none">
-          <h2 className="mr-6 font-bold">
+        <a href={url} className="order-3 w-full mt-2 md:w-auto md:mt-0 md:order-none">
+          <h2 className="mr-6 font-bold break-all">
             {title}
           </h2>
         </a>
