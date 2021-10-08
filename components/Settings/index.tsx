@@ -3,7 +3,7 @@ import { CheckBox, TextBox, TagTextBox } from '../Inputs'
 import { Platform, BossFilter, DS3, DS1 } from '../../types'
 import { SettingsContext } from '../../state'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import firebase from 'firebase'
+import firebase from '../../firebase'
 import Select, { SelectItem } from '../Select'
 
 export type SettingsProps = {
