@@ -15,6 +15,7 @@ import { SettingsContext } from '../state'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { doLogin, getRedditInstance, useWriteBatch } from '../util'
 import Spinner from '../components/Spinner'
+import bonfire from '../public/images/bonfire.png'
 
 const karmaPattern = /\+(\d+) Karma/
 
@@ -149,8 +150,14 @@ export default function Home(props: HomeProps) {
                 }
               </ol>
               : (
-                <div className="flex items-center justify-center w-full h-52">
-                  <span>Rest, Ashen One, for there are no duties matching your criteria.</span>
+                <div className="flex flex-col items-center justify-center w-full">
+                  <div className="hidden xl:block">
+                    <Image
+                      src={bonfire}
+                    />
+                  </div>
+
+                  <span className="mt-4">Rest, Ashen One, for there are no duties matching your criteria.</span>
                 </div>
               )
           }
