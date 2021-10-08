@@ -20,11 +20,13 @@ const karmaPattern = /\+(\d+) Karma/
 
 const defaultSettings = {
   bossFilter: BossFilter.Include,
+  bosses: [] as string[],
   updateInterval: 10,
   hideFulfilledDuties: false,
   shouldNotify: false,
   playNotificationSound: false,
-  platforms: [Platform.PC, Platform.Xbox, Platform.PS4, Platform.PS5, Platform.Switch],
+  platforms: [] as Platform[],
+  // platforms: [Platform.PC, Platform.Xbox, Platform.PS4, Platform.PS5, Platform.Switch],
 }
 
 const includeBossFilter = (bosses: string[], boss: string) => bosses.includes(boss)
@@ -50,11 +52,17 @@ export default function Home(props: HomeProps) {
   const reddit = new Reddit()
   const seenDuties = useRef<Record<string, boolean>>({})
 
+  const handleSignOutClick = () => {
+    firebase.auth().signOut()
+  }
+
   const updateSetting = async (setting: Setting, value: any) => {
-    setSettings({ ...settings, [setting]: value })
+    const newSettings = { ...settings, [setting]: value }
+
+    setSettings(newSettings)
 
     if (user) {
-      batch.set(firebase.firestore().doc(`settings/${user.uid}`), { [setting]: value }, { merge: true })
+      batch.set(firebase.firestore().doc(`settings/${user.uid}`), newSettings, { merge: true })
     }
   }
 
@@ -84,13 +92,22 @@ export default function Home(props: HomeProps) {
   }, [visibleDuties])
 
   useEffect(() => {
+    let newVisibleDuties = [...duties]
+
     if (settings.hideFulfilledDuties) {
-      setVisibleDuties(duties.filter(duty => !duty.isFulfilled))
+      newVisibleDuties = newVisibleDuties.filter(duty => !duty.isFulfilled)
     }
-    else {
-      setVisibleDuties(duties)
+
+    if (settings.bosses.length > 0) {
+      newVisibleDuties = newVisibleDuties.filter(duty => duty.boss && settings.bosses.includes(duty.boss))
     }
-  }, [settings.hideFulfilledDuties, duties])
+
+    if (settings.platforms.length > 0) {
+      newVisibleDuties = newVisibleDuties.filter(duty => settings.platforms.includes(duty.platform))
+    }
+
+    setVisibleDuties(newVisibleDuties)
+  }, [settings.hideFulfilledDuties, settings.bosses, settings.platforms, duties])
 
   useEffect(() => {
     const dutyRefreshTimer = setInterval(async () => {
@@ -114,8 +131,12 @@ export default function Home(props: HomeProps) {
 
           {
             loadingUser
-              ? <Spinner className="w-6 h-6 mb-6" /> : user ? <span className="mb-8">{user.uid}</span>
+              ? <Spinner className="w-6 h-6 mx-auto mb-6" /> : user ? <span className="mb-2">Signed in as {user.uid}.</span>
                 : <button onClick={doLogin} className="p-2 mb-6 bg-blue-700">Sign in through reddit</button>
+          }
+
+          {
+            user && <button onClick={handleSignOutClick} className="block p-2 mx-auto mt-2 bg-blue-700">Sign out</button>
           }
 
           <Settings />

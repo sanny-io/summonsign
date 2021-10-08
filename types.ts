@@ -36,8 +36,8 @@ export type Game = {
 export const DS1: Game = {
   name: 'Dark Souls 1',
   id: 'DS1',
-  platforms: [Platform.PC],
-  pattern: /ds1/,
+  platforms: [Platform.PC, Platform.PS4],
+  pattern: /ds1|dsr/,
   bosses: {
     'Asylum Demon': /as+[yi]l+um/i,
     'Bell Gargoyle': /gargo/i,
@@ -79,7 +79,7 @@ export const DS3: Game = {
     'Aldrich, Devourer of Gods': /ald?rit?ch?/i,
     'Dancer of the Boreal Valley': /dancer/i,
     'Dragonslayer Armour': /dragon[-\s]?slayer/i,
-    'Oceiros, the Consumed King': /oc[eir]*os?|consumed?/i,
+    'Oceiros, the Consumed King': /o[cs][eir]*os?|consumed?/i,
     'Champion Gundyr': /gund[yi]r/i,
     'Twin Princes': /twin|princes|lorian/i,
     'Nameless King': /name?less?/i,

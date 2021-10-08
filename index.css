@@ -27,7 +27,7 @@
     @apply text-blue-500;
   }
 
-  *:focus {
+  *:not([id*="react-select"]):focus {
     @apply outline-none focus:ring focus:border-blue-500;
   }
 

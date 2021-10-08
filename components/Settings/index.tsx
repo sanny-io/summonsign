@@ -1,12 +1,14 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { CheckBox, TextBox, TagTextBox } from '../Inputs'
-import { Platform, BossFilter } from '../../types'
+import { Platform, BossFilter, DS3, DS1 } from '../../types'
 import { SettingsContext } from '../../state'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import firebase from 'firebase'
+import Select, { SelectItem } from '../Select'
 
 export type SettingsProps = {
   bossFilter: BossFilter,
+  bosses: string[],
   updateInterval: number,
   hideFulfilledDuties: boolean,
   shouldNotify: boolean,
@@ -17,12 +19,38 @@ export type SettingsProps = {
 export default function Settings() {
   const { settings, updateSetting } = useContext(SettingsContext)
   const [user] = useAuthState(firebase.auth())
+  const [platforms, setPlatforms] = useState<unknown>(settings.platforms.map(platform => ({ label: Platform[platform], value: platform })))
+  const [bosses, setBosses] = useState<unknown>(settings.bosses.map(boss => ({ label: boss, value: boss })))
+
+  useEffect(() => {
+    updateSetting('platforms', (platforms as SelectItem[]).map(platform => platform.value))
+  }, [platforms])
+
+  useEffect(() => {
+    updateSetting('bosses', (bosses as SelectItem[]).map(boss => boss.value))
+  }, [bosses])
 
   return (
     <div className="w-full my-6 text-left">
-      {/* <TagTextBox
-        className="mb-4"
-        placeholder="Platforms" /> */}
+      <Select
+        isMulti
+        closeMenuOnSelect={false}
+        options={[Platform.PC, Platform.Xbox, Platform.PS4, Platform.PS5, Platform.Switch].map(
+          platform => ({ label: Platform[platform], value: platform })
+        )}
+        value={platforms}
+        placeholder="Platforms"
+        onChange={setPlatforms}
+      />
+
+      <Select
+        isMulti
+        closeMenuOnSelect={false}
+        options={Object.keys({ ...DS1.bosses, ...DS3.bosses }).map(boss => ({ label: boss, value: boss }))}
+        value={bosses}
+        placeholder="Bosses"
+        onChange={setBosses}
+      />
 
       <CheckBox
         checked={settings.hideFulfilledDuties}
@@ -53,7 +81,7 @@ export default function Settings() {
         <TextBox
           type="number"
           className="w-[100px] pl-2 mx-2"
-          value={settings.updateInterval.toString()}
+          value={settings.updateInterval}
           onChange={value => updateSetting('updateInterval', Number(value))}
         />
 
@@ -66,53 +94,3 @@ export default function Settings() {
     </div>
   )
 }
-
-// export default function Settings({ }) {
-//   const [bossFilter, setBossFilter] = useLocalStorage<BossFilter>('bossFilter', BossFilter.Include)
-//   const [updateInterval, setUpdateInterval] = useLocalStorage<number>('updateInterval', 10)
-//   const [hideFulfilledDuties, setHideFulfilledDuties] = useLocalStorage<boolean>('hideFulfilledDuties', false)
-//   const [shouldNotify, setShouldNotify] = useLocalStorage<boolean>('shouldNotify', false)
-//   const [playNotificationSound, setPlayNotificationSound] = useLocalStorage<boolean>('playNotificationSound', false)
-//   const echoSound = useRef<HTMLAudioElement>(null)
-//   const [platforms, setPlatforms] = useLocalStorage<Platform[]>('platforms',
-//     [
-//       Platform.PC, Platform.Xbox, Platform.PS4, Platform.PS5, Platform.Switch
-//     ]
-//   )
-
-//   const handleUpdateIntervalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     setUpdateInterval(Number(e.target.value))
-//   }
-
-//   return (
-//     <div className="w-full mb-6">
-//       <CheckBox checked={hideFulfilledDuties} onChange={setHideFulfilledDuties}>
-//         Hide fulfilled duties
-//       </CheckBox>
-
-//       <CheckBox checked={shouldNotify} onChange={setShouldNotify}>
-//         Notify me of new duties
-//       </CheckBox>
-
-//       <CheckBox className="ml-6" disabled={!shouldNotify} checked={playNotificationSound} onChange={setPlayNotificationSound}>
-//         and play a sound
-//       </CheckBox>
-
-//       <span>Check for new duties every <input type="number" className="w-[100px] pl-2 mx-2" value={updateInterval} onChange={handleUpdateIntervalChange} min={10} /> seconds</span>
-//       <audio src="/audio/echo.mp3" ref={echoSound} />
-//     </div>
-//   )
-// }
-
-// bossFilter,
-  // updateInterval,
-  // hideFulfilledDuties,
-  // shouldNotify,
-  // playNotificationSound,
-  // platforms,
-  // const [settingsDocument, loading, error] = useDocument(
-  //   firebase.firestore().doc(`settings/${firebase.auth().currentUser?.uid}`),
-  //   {
-  //     snapshotListenOptions: { includeMetadataChanges: true },
-  //   }
-  // )

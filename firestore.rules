@@ -1,7 +1,7 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isSameUser() {
+    function isSameUser(uid) {
       return request.auth != null && request.auth.uid == uid;
     }
 
@@ -11,8 +11,8 @@ service cloud.firestore {
     }
 
     match /settings/{uid} {
-      allow read: if isSameUser();
-      allow write: if isSameUser();
+      allow read: if isSameUser(uid);
+      allow write: if isSameUser(uid);
     }
   }
 }

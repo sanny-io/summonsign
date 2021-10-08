@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 export type TextBoxProps = {
   className?: string,
-  value?: string,
+  value?: any,
   type?: string,
   onChange?: React.Dispatch<string>,
 }
@@ -34,7 +34,7 @@ export function TextBox({ value, onChange, className, type }: TextBoxProps) {
     <input
       type={type}
       className={className}
-      defaultValue={value}
+      defaultValue={value.toString()}
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
     />
