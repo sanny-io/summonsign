@@ -5,6 +5,11 @@ import { dayjs } from '../../util'
 import PlatformTag from '../PlatformTag'
 import InfoBox from '../InfoBox'
 
+// @ts-ignore
+import linkifyRegex from 'remark-linkify-regex'
+
+const passwordPattern = /\b(pass?(word)?|pw|code)\b/i
+
 export type DutyProps = {
   title: string,
   content: string,
@@ -38,7 +43,7 @@ export default function Duty(props: DutyProps) {
       <hr className="mb-2 border-gray-700" />
 
       <div className="markdown">
-        <Markdown>{content}</Markdown>
+        <Markdown remarkPlugins={[linkifyRegex(passwordPattern)]}>{content}</Markdown>
       </div>
     </div>
   )

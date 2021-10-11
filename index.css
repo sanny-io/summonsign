@@ -79,4 +79,9 @@
     @apply block;
     @apply p-3;
   }
+
+  .markdown a {
+    @apply text-green-400;
+    @apply pointer-events-none;
+  }
 }

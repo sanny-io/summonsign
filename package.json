@@ -30,6 +30,7 @@
     "react-firebase-hooks": "^3.0.4",
     "react-markdown": "^6.0.2",
     "react-select": "^5.1.0",
+    "remark-linkify-regex": "^1.0.0",
     "snoowrap": "^1.23.0",
     "tailwindcss": "^2.2.4"
   },
