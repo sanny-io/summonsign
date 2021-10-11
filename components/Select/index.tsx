@@ -8,6 +8,7 @@ export type SelectItem = {
 
 const styles: StylesConfig = {
   menu: provided => ({ ...provided, background: '#262626' }),
+  input: provided => ({ ...provided, color: 'white' }),
   control: provided => ({ ...provided, background: '#262626', border: 'none' }),
   multiValue: provided => ({ ...provided, background: 'black', border: 'none', padding: '3px' }),
   multiValueLabel: provided => ({ ...provided, color: 'white' }),
