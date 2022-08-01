@@ -25,6 +25,11 @@ const authSlice = createSlice({
 
     builder.addCase(signIn.fulfilled, (state, action) => {
       state.user = action.payload as unknown as User
+      state.isAuthenticating = false
+    })
+
+    builder.addCase(signIn.rejected, (state, action) => {
+      state.isAuthenticating = false
     })
   },
 })

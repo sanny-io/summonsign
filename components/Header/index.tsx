@@ -1,9 +1,14 @@
 import { Button } from '@mantine/core'
 import Image from 'next/image'
 import React, { memo } from 'react'
+import useAuth from '../../hooks/useAuth'
 import Logo from '../../public/images/logo.png'
 
 function Header() {
+  const { signIn, user, isAuthenticating } = useAuth()
+
+  console.log({ isAuthenticating })
+
   return (
     <div className="container flex flex-col py-16 text-center">
       <div className="flex justify-center mb-4">
@@ -19,7 +24,9 @@ function Header() {
 
       <ol className="flex justify-center space-x-2">
         <li>
-          <Button>
+          <Button onClick={() => {
+            signIn().then(console.log)
+          }}>
             Sign in using reddit
           </Button>
         </li>
