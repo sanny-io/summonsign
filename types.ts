@@ -3,15 +3,12 @@ import store from './store'
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 
-export enum Platform {
-  None,
-  PC = 1 << 1,
-  Xbox = 1 << 2,
-  PS4 = 1 << 3,
-  PS5 = 1 << 4,
-  Switch = 1 << 5,
-  All = PC | Xbox | PS4 | PS5 | Switch,
-}
+export type Platform =
+  | 'pc'
+  | 'xbox'
+  | 'ps4'
+  | 'ps5'
+  | 'switch'
 
 export enum Route {
   HomePage = '/',
@@ -34,6 +31,7 @@ export type BossFilter = 'include' | 'exclude'
 
 export type User = {
   settings: Settings,
+  id: string,
 }
 
 export type Duty = {
@@ -51,7 +49,7 @@ export type Game = {
 export const DS1: Game = {
   name: 'Dark Souls 1',
   id: 'DS1',
-  platforms: [Platform.PC, Platform.PS4],
+  platforms: ['pc', 'ps4'],
   pattern: /ds1|dsr/,
   bosses: {
     'Asylum Demon': /as+[yi]l+um/i,
@@ -79,7 +77,7 @@ export const DS1: Game = {
 export const DS3: Game = {
   name: 'Dark Souls 3',
   id: 'DS3',
-  platforms: [Platform.PC, Platform.Xbox, Platform.PS4, Platform.PS5],
+  platforms: ['pc', 'xbox', 'ps4', 'ps5'],
   pattern: /ds3/i,
   bosses: {
     'Vordt of the Boreal Valley': /vord?t/i,

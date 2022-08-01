@@ -1,6 +1,7 @@
 import type { AppProps as Props } from 'next/app'
 
 import '../index.css'
+import firebase from '../firebase'
 import Head from 'next/head'
 import Footer from '../components/Footer'
 import MainLayout from '../components/MainLayout'
