@@ -1,15 +1,15 @@
 const colors = require('tailwindcss/colors')
 
 module.exports = {
-  mode: 'jit',
-  purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+  content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+
   theme: {
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
       black: colors.black,
       white: colors.white,
-      gray: colors.trueGray,
+      gray: colors.neutral,
       green: colors.green,
       blue: colors.blue,
       indigo: colors.indigo,
@@ -17,14 +17,22 @@ module.exports = {
       yellow: colors.yellow,
       orange: colors.orange,
     },
-    extend: {
-      backgroundImage: theme => ({
-        'fulfilled': "url('/images/fulfilled.png')",
-      })
+
+    container: {
+      center: true,
+      padding: '1rem',
     }
   },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
+
+  typography: ({ theme }) => ({
+    DEFAULT: {
+      css: {
+        '--tw-prose-links': theme('colors.blue[600]'),
+      }
+    }
+  }),
+
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }

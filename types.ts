@@ -1,7 +1,3 @@
-import snoowrap from 'snoowrap'
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { SettingsProps } from './components/Settings'
-
 export enum Platform {
   None,
   PC = 1 << 1,
@@ -19,11 +15,25 @@ export enum Route {
   AuthCreateSession = '/api/auth/session',
 }
 
-export type SummonSignApiRequest = NextApiRequest & React.Dispatch<string> & {
-  reddit: snoowrap,
+export type Settings = {
+  bossFilter: BossFilter,
+  bosses: string[],
+  updateInterval: number,
+  hideFulfilledDuties: boolean,
+  shouldNotify: boolean,
+  playNotificationSound: boolean,
+  platforms: Platform[],
 }
 
-export type SummonSignApiHandler<T> = (request: SummonSignApiRequest, response: NextApiResponse<T>) => void
+export type BossFilter = 'include' | 'exclude'
+
+export type User = {
+  settings: Settings,
+}
+
+export type Duty = {
+
+}
 
 export type Game = {
   name: string,
@@ -92,10 +102,3 @@ export const DS3: Game = {
     'Slave Knight Gael': /slave|gael/i,
   }
 }
-
-export enum BossFilter {
-  Include,
-  Exclude,
-}
-
-export type Setting = keyof SettingsProps
