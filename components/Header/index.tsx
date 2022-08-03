@@ -5,7 +5,7 @@ import useAuth from '../../hooks/useAuth'
 import Logo from '../../public/images/logo.png'
 
 function Header() {
-  const { signIn, user, isAuthenticating } = useAuth()
+  const { signIn, signOut, user, isAuthenticating } = useAuth()
 
   console.log({ isAuthenticating })
 

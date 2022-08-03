@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { signIn } from '../store/auth'
+import { signIn, signOut } from '../store/auth'
 import type { AppDispatch, RootState } from '../types'
 
 export default function useAuth() {
@@ -13,6 +13,7 @@ export default function useAuth() {
 
   return {
     ...auth,
-    signIn: async () => await dispatch(signIn()).unwrap(),
+    signIn: async () => await dispatch(signIn('tttttt')).unwrap(),
+    signOut: async () => await dispatch(signOut()).unwrap(),
   }
 }

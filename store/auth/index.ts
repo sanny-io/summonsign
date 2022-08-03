@@ -2,6 +2,7 @@ import type { User } from '../../types'
 
 import { createSlice } from '@reduxjs/toolkit'
 import signIn from './signIn'
+import signOut from './signOut'
 
 type AuthState = {
   user: User | null,
@@ -24,15 +25,19 @@ const authSlice = createSlice({
     })
 
     builder.addCase(signIn.fulfilled, (state, action) => {
-      state.user = action.payload as unknown as User
+      state.user = action.payload
       state.isAuthenticating = false
     })
 
     builder.addCase(signIn.rejected, (state, action) => {
       state.isAuthenticating = false
     })
+
+    builder.addCase(signOut.fulfilled, state => {
+      state.user = null
+    })
   },
 })
 
 export default authSlice
-export { signIn }
+export { signIn, signOut }
