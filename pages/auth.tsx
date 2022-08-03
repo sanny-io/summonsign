@@ -7,11 +7,19 @@ import { Route } from '../types'
 export default function AuthPage() {
   const router = useRouter()
   const { user, signIn } = useAuth()
-  const { customToken, code: redditAccessToken } = router.query
+  const { code: redditAccessToken } = router.query
 
   useEffect(() => {
-    console.log({ customToken })
-  }, [customToken])
+    if (user) {
+      router.push(Route.HomePage)
+    }
+  }, [user])
+
+  useEffect(() => {
+    if (redditAccessToken) {
+      signIn()
+    }
+  }, [redditAccessToken])
 
   return (
     <div className="flex items-center justify-center w-screen h-screen bg-black">

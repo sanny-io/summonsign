@@ -3,6 +3,7 @@ import type { User } from '../../types'
 import { createSlice } from '@reduxjs/toolkit'
 import signIn from './signIn'
 import signOut from './signOut'
+import { getLoginUrl } from '../../util'
 
 type AuthState = {
   user: User | null,
@@ -17,7 +18,11 @@ const initialState: AuthState = {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    redirectToSignIn() {
+      window.location.href = getLoginUrl()
+    }
+  },
 
   extraReducers: builder => {
     builder.addCase(signIn.pending, state => {
@@ -29,7 +34,7 @@ const authSlice = createSlice({
       state.isAuthenticating = false
     })
 
-    builder.addCase(signIn.rejected, (state, action) => {
+    builder.addCase(signIn.rejected, state => {
       state.isAuthenticating = false
     })
 
@@ -41,3 +46,4 @@ const authSlice = createSlice({
 
 export default authSlice
 export { signIn, signOut }
+export const { redirectToSignIn } = authSlice.actions

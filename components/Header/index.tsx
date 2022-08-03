@@ -5,7 +5,7 @@ import useAuth from '../../hooks/useAuth'
 import Logo from '../../public/images/logo.png'
 
 function Header() {
-  const { signIn, signOut, user, isAuthenticating } = useAuth()
+  const { signIn, signOut, user, isAuthenticating, redirectToSignIn } = useAuth()
 
   console.log({ isAuthenticating })
 
@@ -24,11 +24,15 @@ function Header() {
 
       <ol className="flex justify-center space-x-2">
         <li>
-          <Button onClick={() => {
-            signIn().then(console.log)
-          }}>
-            Sign in using reddit
-          </Button>
+          {
+            user
+              ? <Button variant="subtle" onClick={signOut}>
+                Sign out
+              </Button>
+              : <Button onClick={redirectToSignIn}>
+                Sign in using reddit
+              </Button>
+          }
         </li>
       </ol>
     </div>
