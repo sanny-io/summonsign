@@ -18,17 +18,17 @@ export default function useSettings() {
       value,
     }))
 
-    // setDoc(
-    //   doc(firestore, `users/${user?.id}`),
+    setDoc(
+      doc(firestore, `settings/${user?.id}`),
 
-    //   {
-    //     [setting]: value,
-    //   },
+      {
+        [setting]: value,
+      },
 
-    //   {
-    //     merge: true,
-    //   },
-    // )
+      {
+        merge: true,
+      },
+    )
   }
 
   return {

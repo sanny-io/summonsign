@@ -7,8 +7,6 @@ import Logo from '../../public/images/logo.png'
 function Header() {
   const { signIn, signOut, user, isAuthenticating, redirectToSignIn } = useAuth()
 
-  console.log({ isAuthenticating })
-
   return (
     <div className="container flex flex-col py-16 text-center">
       <div className="flex justify-center mb-4">
@@ -26,9 +24,15 @@ function Header() {
         <li>
           {
             user
-              ? <Button variant="subtle" onClick={signOut}>
-                Sign out
-              </Button>
+              ? <div>
+                <p className="mb-4">
+                  {user.id}
+                </p>
+
+                <Button variant="subtle" onClick={signOut}>
+                  Sign out
+                </Button>
+              </div>
               : <Button onClick={redirectToSignIn}>
                 Sign in using reddit
               </Button>

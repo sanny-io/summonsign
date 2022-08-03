@@ -1,6 +1,9 @@
 import { initializeApp } from 'firebase/app'
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
-import { connectAuthEmulator, getAuth } from 'firebase/auth'
+import { connectAuthEmulator, getAuth, onAuthStateChanged } from 'firebase/auth'
+import store from './store'
+import { setUser, signOut } from './store/auth'
+import { User } from './types'
 
 const app = initializeApp({
   apiKey: 'AIzaSyB1Gl7_Bac0_k8Rgh0xgoqiBZ02yS5R138',
@@ -21,6 +24,19 @@ if (process.env.NODE_ENV === 'development') {
   })
 
   connectFirestoreEmulator(firestore, 'localhost', 8080)
+}
+
+if (typeof document !== 'undefined') {
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      store.dispatch(setUser({
+        id: user.uid,
+      } as User))
+    }
+    else {
+      store.dispatch(setUser(null))
+    }
+  })
 }
 
 export default app

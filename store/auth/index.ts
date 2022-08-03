@@ -1,9 +1,11 @@
 import type { User } from '../../types'
 
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createListenerMiddleware, PayloadAction } from '@reduxjs/toolkit'
 import signIn from './signIn'
 import signOut from './signOut'
 import { getLoginUrl } from '../../util'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from '../../firebase'
 
 type AuthState = {
   user: User | null,
@@ -21,7 +23,11 @@ const authSlice = createSlice({
   reducers: {
     redirectToSignIn() {
       window.location.href = getLoginUrl()
-    }
+    },
+
+    setUser(state, action: PayloadAction<User | null>) {
+      state.user = action.payload
+    },
   },
 
   extraReducers: builder => {
@@ -46,4 +52,4 @@ const authSlice = createSlice({
 
 export default authSlice
 export { signIn, signOut }
-export const { redirectToSignIn } = authSlice.actions
+export const { redirectToSignIn, setUser } = authSlice.actions
