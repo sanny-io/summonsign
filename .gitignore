@@ -2,5 +2,7 @@ node_modules
 out
 next-env.d.ts
 .next
-.env.local
+.env
+*.env.*
 *.log
+next-env.d.ts
