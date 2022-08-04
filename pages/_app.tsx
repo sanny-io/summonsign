@@ -18,9 +18,11 @@ export default function App({ Component, pageProps }: Props) {
         <meta name="theme-color" content="#000000" />
       </Head>
 
-      <MainLayout>
-        <Component {...pageProps} />
-      </MainLayout>
+      <MantineProvider theme={{ colorScheme: 'dark' }}>
+        <MainLayout>
+          <Component {...pageProps} />
+        </MainLayout>
+      </MantineProvider>
 
       <Footer />
     </Provider>

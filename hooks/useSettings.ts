@@ -11,20 +11,24 @@ import { useDebouncedCallback } from 'use-debounce'
 export default function useSettings() {
   const dispatch = useDispatch<AppDispatch>()
   const { user } = useAuth()
-  const settings = useSelector((state: RootState) => state.duties.settings)
-  const debouncedSetDoc = useDebouncedCallback(useCallback(() => {
-    setDoc(
-      doc(firestore, `settings/${user?.id}`),
-      settings,
-      {
-        merge: true,
-      },
-    )
-  }, [settings]), 1000)
+  const settings = useSelector((state: RootState) => state.settings.settings)
+  const debouncedUpdateSettings = useDebouncedCallback(useCallback(() => {
+    localStorage.setItem('settings', JSON.stringify(settings))
+
+    if (user) {
+      setDoc(
+        doc(firestore, `settings/${user.id}`),
+        settings,
+        {
+          merge: true,
+        },
+      )
+    }
+  }, [settings, user]), 1000)
 
   const updateSettings = (settings: Partial<Settings>) => {
     dispatch(updateSettingsInternal(settings))
-    debouncedSetDoc()
+    debouncedUpdateSettings()
   }
 
   return {

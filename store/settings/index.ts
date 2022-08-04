@@ -5,12 +5,14 @@ import { firestore } from '../../firebase'
 import { doc, setDoc } from 'firebase/firestore'
 import { setUser } from '../auth'
 
+const storedSettings = typeof document !== 'undefined' && localStorage.getItem('settings')
+
 type SettingsState = {
   settings: Settings,
 }
 
 const initialState: SettingsState = {
-  settings: {
+  settings: storedSettings && JSON.parse(storedSettings) || {
     bossFilter: 'include',
     bosses: [],
     updateInterval: 10,
@@ -36,7 +38,10 @@ const settingsSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(setUser, (state, action) => {
       if (action.payload) {
-        state.settings = action.payload.settings
+        state.settings = {
+          ...state.settings,
+          ...action.payload.settings,
+        }
       }
     })
   },

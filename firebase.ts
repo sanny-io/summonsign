@@ -1,9 +1,9 @@
 import { initializeApp } from 'firebase/app'
-import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
+import { connectFirestoreEmulator, doc, getDoc, getFirestore } from 'firebase/firestore'
 import { connectAuthEmulator, getAuth, onAuthStateChanged } from 'firebase/auth'
 import store from './store'
 import { setUser, signOut } from './store/auth'
-import { User } from './types'
+import { Settings, User } from './types'
 
 const app = initializeApp({
   apiKey: 'AIzaSyB1Gl7_Bac0_k8Rgh0xgoqiBZ02yS5R138',
@@ -27,10 +27,13 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 if (typeof document !== 'undefined') {
-  onAuthStateChanged(auth, user => {
+  onAuthStateChanged(auth, async user => {
     if (user) {
+      const settings = (await (getDoc(doc(firestore, `settings/${user.uid}`)))).data() as Settings | null
+
       store.dispatch(setUser({
         id: user.uid,
+        settings,
       } as User))
     }
     else {

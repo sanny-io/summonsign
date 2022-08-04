@@ -8,7 +8,7 @@
   #__next {
     @apply h-full;
     @apply bg-black;
-    @apply text-white;
+    @apply text-[#C1C2C5];
   }
 
   #__next {
