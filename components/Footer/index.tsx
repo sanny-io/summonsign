@@ -1,7 +1,11 @@
-export default function Footer({ }) {
+import { memo } from 'react'
+
+function Footer({ }) {
   return (
     <footer>
 
     </footer>
   )
 }
+
+export default memo(Footer)

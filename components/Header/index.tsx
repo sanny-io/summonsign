@@ -3,6 +3,7 @@ import Image from 'next/image'
 import React, { memo } from 'react'
 import useAuth from '../../hooks/useAuth'
 import Logo from '../../public/images/logo.png'
+import Spinner from '../Spinner'
 
 function Header() {
   const { signIn, signOut, user, isAuthenticating, redirectToSignIn } = useAuth()
@@ -23,19 +24,21 @@ function Header() {
       <ol className="flex justify-center space-x-2">
         <li>
           {
-            user
-              ? <div>
-                <p className="mb-4">
-                  {user.id}
-                </p>
+            isAuthenticating
+              ? <Spinner />
+              : user
+                ? <div>
+                  <p className="mb-4">
+                    {user.id}
+                  </p>
 
-                <Button variant="subtle" onClick={signOut}>
-                  Sign out
+                  <Button variant="subtle" onClick={signOut}>
+                    Sign out
+                  </Button>
+                </div>
+                : <Button onClick={redirectToSignIn}>
+                  Sign in using reddit
                 </Button>
-              </div>
-              : <Button onClick={redirectToSignIn}>
-                Sign in using reddit
-              </Button>
           }
         </li>
       </ol>

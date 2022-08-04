@@ -14,7 +14,7 @@ type AuthState = {
 
 const initialState: AuthState = {
   user: null,
-  isAuthenticating: false,
+  isAuthenticating: true,
 }
 
 const authSlice = createSlice({
@@ -27,27 +27,28 @@ const authSlice = createSlice({
 
     setUser(state, action: PayloadAction<User | null>) {
       state.user = action.payload
+      state.isAuthenticating = false
     },
   },
 
-  extraReducers: builder => {
-    builder.addCase(signIn.pending, state => {
-      state.isAuthenticating = true
-    })
+  // extraReducers: builder => {
+  //   builder.addCase(signIn.pending, state => {
+  //     state.isAuthenticating = true
+  //   })
 
-    builder.addCase(signIn.fulfilled, (state, action) => {
-      state.user = action.payload
-      state.isAuthenticating = false
-    })
+  //   builder.addCase(signIn.fulfilled, (state, action) => {
+  //     state.user = action.payload
+  //     state.isAuthenticating = false
+  //   })
 
-    builder.addCase(signIn.rejected, state => {
-      state.isAuthenticating = false
-    })
+  //   builder.addCase(signIn.rejected, state => {
+  //     state.isAuthenticating = false
+  //   })
 
-    builder.addCase(signOut.fulfilled, state => {
-      state.user = null
-    })
-  },
+  //   builder.addCase(signOut.fulfilled, state => {
+  //     state.user = null
+  //   })
+  // },
 })
 
 export default authSlice

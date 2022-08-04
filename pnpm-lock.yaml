@@ -23,6 +23,7 @@ specifiers:
   swr: ^1.3.0
   tailwindcss: ^3.1.7
   typescript: ^4.7.4
+  use-debounce: ^8.0.3
 
 dependencies:
   '@emotion/react': 11.10.0_szkdlbnthht4v3jvm76fn7u6na
@@ -39,6 +40,7 @@ dependencies:
   react-redux: 8.0.2_bb2bxwco6ptpubzwpazr52qf6i
   snoowrap: 1.23.0
   swr: 1.3.0_react@18.2.0
+  use-debounce: 8.0.3_react@18.2.0
 
 devDependencies:
   '@tailwindcss/typography': 0.5.4_tailwindcss@3.1.7
@@ -4238,6 +4240,15 @@ packages:
     resolution: {integrity: sha512-GLMG0Jc/jiKov/3Ulid1wbv3r54K9HlMW29IWcDFPEqFkSO2nS0MuefWgMJpeHQ9YJeXDL3ZUF+P3jdXlZX/cQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
+  /use-debounce/8.0.3_react@18.2.0:
+    resolution: {integrity: sha512-BV7xuVy4LS0HtzHb23sDwAjfNjdBWlc4oyjJLcdCoVAjPv1+hroZYsCXX4VfRJT+8sLaqCftBOO8l7CMQtn9Gw==}
+    engines: {node: '>= 10.0.0'}
+    peerDependencies:
+      react: '>=16.8.0'
     dependencies:
       react: 18.2.0
     dev: false
