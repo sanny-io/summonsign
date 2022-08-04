@@ -24,7 +24,7 @@ export default function useSettings() {
         },
       )
     }
-  }, [settings, user]), 1000)
+  }, [settings, user]), 5000)
 
   const updateSettings = (settings: Partial<Settings>) => {
     dispatch(updateSettingsInternal(settings))

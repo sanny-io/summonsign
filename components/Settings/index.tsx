@@ -28,9 +28,19 @@ function Settings() {
           className="ml-8"
         />
 
-        <p>
-          Check for new duties every <NumberInput /> seconds
-        </p>
+        <div>
+          <label htmlFor="updateInterval">
+            Check for new duties every
+            <NumberInput
+              id="updateInterval"
+              value={settings.updateInterval}
+              onChange={interval => updateSettings({ updateInterval: interval })}
+              min={10}
+              defaultValue={10}
+            />
+            seconds
+          </label>
+        </div>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { Button } from '@mantine/core'
+import { Button, Indicator } from '@mantine/core'
 import Image from 'next/image'
 import React, { memo } from 'react'
 import useAuth from '../../hooks/useAuth'
@@ -17,25 +17,15 @@ function Header() {
         />
       </div>
 
-      <h1 className="mb-6">
-        Be summoned to another world.
-      </h1>
-
       <ol className="flex justify-center space-x-2">
         <li>
           {
             isAuthenticating
               ? <Spinner />
               : user
-                ? <div>
-                  <p className="mb-4">
-                    {user.id}
-                  </p>
-
-                  <Button variant="subtle" onClick={signOut}>
-                    Sign out
-                  </Button>
-                </div>
+                ? <Button variant="light" onClick={signOut}>
+                  {user.id}
+                </Button>
                 : <Button onClick={redirectToSignIn}>
                   Sign in using reddit
                 </Button>

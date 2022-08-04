@@ -18,18 +18,26 @@ const app = initializeApp({
 const auth = getAuth(app)
 const firestore = getFirestore(app)
 
-if (process.env.NODE_ENV === 'development') {
+// @ts-ignore
+if (process.env.NODE_ENV === 'development' && !global.emulatorsRunning) {
   connectAuthEmulator(auth, 'http://localhost:9099', {
     disableWarnings: true,
   })
 
   connectFirestoreEmulator(firestore, 'localhost', 8080)
+
+  // @ts-ignore
+  global.emulatorsRunning = true
 }
 
 if (typeof document !== 'undefined') {
   onAuthStateChanged(auth, async user => {
     if (user) {
-      const settings = (await (getDoc(doc(firestore, `settings/${user.uid}`)))).data() as Settings | null
+      const settings = (await (
+        getDoc(
+          doc(firestore, `settings/${user.uid}`)
+        )
+      )).data() as Settings | null
 
       store.dispatch(setUser({
         id: user.uid,
