@@ -18,7 +18,6 @@ export default createAsyncThunk('auth/signIn', async () => {
   )
 
   const customToken: string = (await loginResponse.json()).customToken
-
   const { user } = await signInWithCustomToken(auth, customToken)
 
   return {

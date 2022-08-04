@@ -25,30 +25,11 @@ const authSlice = createSlice({
       window.location.href = getLoginUrl()
     },
 
-    setUser(state, action: PayloadAction<User | null>) {
-      state.user = action.payload
+    setUser(state, { payload: user }: PayloadAction<User | null>) {
+      state.user = user
       state.isAuthenticating = false
     },
   },
-
-  // extraReducers: builder => {
-  //   builder.addCase(signIn.pending, state => {
-  //     state.isAuthenticating = true
-  //   })
-
-  //   builder.addCase(signIn.fulfilled, (state, action) => {
-  //     state.user = action.payload
-  //     state.isAuthenticating = false
-  //   })
-
-  //   builder.addCase(signIn.rejected, state => {
-  //     state.isAuthenticating = false
-  //   })
-
-  //   builder.addCase(signOut.fulfilled, state => {
-  //     state.user = null
-  //   })
-  // },
 })
 
 export default authSlice

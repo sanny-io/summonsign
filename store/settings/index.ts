@@ -1,8 +1,6 @@
-import type { Duty, Settings } from '../../types'
+import type { Settings } from '../../types'
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { firestore } from '../../firebase'
-import { doc, setDoc } from 'firebase/firestore'
 import { setUser } from '../auth'
 
 const storedSettings = typeof document !== 'undefined' && localStorage.getItem('settings')
@@ -27,20 +25,20 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    updateSettings(state, action: PayloadAction<Partial<Settings>>) {
+    updateSettings(state, { payload: settings }: PayloadAction<Partial<Settings>>) {
       state.settings = {
         ...state.settings,
-        ...action.payload,
+        ...settings,
       }
     }
   },
 
   extraReducers: builder => {
-    builder.addCase(setUser, (state, action) => {
-      if (action.payload) {
+    builder.addCase(setUser, (state, { payload: user }) => {
+      if (user) {
         state.settings = {
           ...state.settings,
-          ...action.payload.settings,
+          ...user.settings,
         }
       }
     })
