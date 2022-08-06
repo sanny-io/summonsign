@@ -1,7 +1,5 @@
 import type { Settings } from '../../types'
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { setUser } from '../auth'
 
 const storedSettings = typeof document !== 'undefined' && localStorage.getItem('settings')
 
@@ -31,17 +29,6 @@ const settingsSlice = createSlice({
         ...settings,
       }
     }
-  },
-
-  extraReducers: builder => {
-    builder.addCase(setUser, (state, { payload: user }) => {
-      if (user) {
-        state.settings = {
-          ...state.settings,
-          ...user.settings,
-        }
-      }
-    })
   },
 })
 

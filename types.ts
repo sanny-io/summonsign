@@ -30,7 +30,6 @@ export type Settings = {
 export type BossFilter = 'include' | 'exclude'
 
 export type User = {
-  settings: Settings,
   id: string,
 }
 

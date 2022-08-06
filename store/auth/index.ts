@@ -1,4 +1,4 @@
-import type { User } from '../../types'
+import type { Settings, User } from '../../types'
 
 import { createSlice, createListenerMiddleware, PayloadAction } from '@reduxjs/toolkit'
 import signIn from './signIn'
@@ -6,6 +6,7 @@ import signOut from './signOut'
 import { getLoginUrl } from '../../util'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '../../firebase'
+
 
 type AuthState = {
   user: User | null,

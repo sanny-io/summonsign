@@ -6,14 +6,14 @@ import Logo from '../../public/images/logo.png'
 import Spinner from '../Spinner'
 
 function Header() {
-  const { signIn, signOut, user, isAuthenticating, redirectToSignIn } = useAuth()
+  const { signOut, user, isAuthenticating, redirectToSignIn } = useAuth()
 
   return (
     <div className="container flex flex-col py-16 text-center">
       <div className="flex justify-center mb-4">
         <Image
           src={Logo}
-          layout='intrinsic'
+          layout="intrinsic"
         />
       </div>
 

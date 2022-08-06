@@ -1,10 +1,10 @@
 import React, { memo } from 'react'
 
-export type LoadingProps = {
+export type SpinnerProps = {
   className?: string,
 }
 
-function Spinner({ className = 'w-6 h-6' }: LoadingProps) {
+function Spinner({ className = 'w-6 h-6' }: SpinnerProps) {
   return (
     <svg className={`animate-spin ${className}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
