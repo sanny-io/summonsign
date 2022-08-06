@@ -19,17 +19,19 @@ function Header() {
 
       <ol className="flex justify-center space-x-2">
         <li>
-          {
-            isAuthenticating
-              ? <Spinner />
-              : user
-                ? <Button variant="light" onClick={signOut}>
+          <div className="flex items-center justify-center">
+            <Spinner className={`w-6 h-6 absolute ${!isAuthenticating ? 'invisible' : ''}`} />
+
+            {
+              user
+                ? <Button className={isAuthenticating ? '!invisible' : ''} variant="light" onClick={signOut}>
                   {user.id}
                 </Button>
-                : <Button onClick={redirectToSignIn}>
+                : <Button className={isAuthenticating ? '!invisible' : ''} onClick={redirectToSignIn}>
                   Sign in using reddit
                 </Button>
-          }
+            }
+          </div>
         </li>
       </ol>
     </div>

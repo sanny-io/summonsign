@@ -1,5 +1,6 @@
 import type { Settings } from '../../types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import updateSettings from './updateSettings'
 
 const storedSettings = typeof document !== 'undefined' && localStorage.getItem('settings')
 
@@ -23,14 +24,19 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    updateSettings(state, { payload: settings }: PayloadAction<Partial<Settings>>) {
-      state.settings = {
-        ...state.settings,
-        ...settings,
-      }
-    }
+    setSettings(state, { payload: settings }: PayloadAction<Settings>) {
+      state.settings = settings
+    },
+
+    // updateSettings(state, { payload: settings }: PayloadAction<Partial<Settings>>) {
+    //   state.settings = {
+    //     ...state.settings,
+    //     ...settings,
+    //   }
+    // }
   },
 })
 
 export default settingsSlice
-export const { updateSettings } = settingsSlice.actions
+export const { setSettings } = settingsSlice.actions
+export { updateSettings }

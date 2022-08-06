@@ -4,6 +4,7 @@ import { connectAuthEmulator, getAuth, onAuthStateChanged } from 'firebase/auth'
 import store from './store'
 import { setUser, signOut } from './store/auth'
 import { Settings, User } from './types'
+import { setSettings } from './store/settings'
 
 const app = initializeApp({
   apiKey: 'AIzaSyB1Gl7_Bac0_k8Rgh0xgoqiBZ02yS5R138',
@@ -41,8 +42,11 @@ if (typeof document !== 'undefined') {
 
       store.dispatch(setUser({
         id: user.uid,
-        settings,
       } as User))
+
+      if (settings) {
+        store.dispatch(setSettings(settings))
+      }
     }
     else {
       store.dispatch(setUser(null))

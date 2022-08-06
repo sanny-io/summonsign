@@ -1,7 +1,16 @@
+import type { AnyAction, ThunkAction } from '@reduxjs/toolkit'
 import store from './store'
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
+export type AppThunk<Return = void> = ThunkAction<
+  Return,
+  RootState,
+  unknown,
+  AnyAction
+>
+
+// export type AppAsyncThunk<Return = void, Parameter = any> = AsyncThunk
 
 export type Platform =
   | 'pc'
@@ -34,7 +43,15 @@ export type User = {
 }
 
 export type Duty = {
-
+  id: string,
+  title: string,
+  content: string,
+  platform: Platform,
+  lastUpdated: number,
+  url: string,
+  boss?: string,
+  soulLevel?: number,
+  isFulfilled: boolean,
 }
 
 export type Game = {

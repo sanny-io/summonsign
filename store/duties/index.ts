@@ -5,17 +5,17 @@ import refresh from './refresh'
 const filterDuties = (duties: Duty[], settings: Settings) => {
   let filteredDuties = [...duties]
 
-  // if (settings.hideFulfilledDuties) {
-  //   filteredDuties = filteredDuties.filter(duty => !duty.isFulfilled)
-  // }
+  if (settings.hideFulfilledDuties) {
+    filteredDuties = filteredDuties.filter(duty => !duty.isFulfilled)
+  }
 
-  // if (settings.bosses.length > 0) {
-  //   filteredDuties = filteredDuties.filter(duty => duty.boss && settings.bosses.includes(duty.boss))
-  // }
+  if (settings.bosses.length > 0) {
+    filteredDuties = filteredDuties.filter(duty => duty.boss && settings.bosses.includes(duty.boss))
+  }
 
-  // if (settings.platforms.length > 0) {
-  //   filteredDuties = filteredDuties.filter(duty => settings.platforms.includes(duty.platform))
-  // }
+  if (settings.platforms.length > 0) {
+    filteredDuties = filteredDuties.filter(duty => settings.platforms.includes(duty.platform))
+  }
 
   return filteredDuties
 }
