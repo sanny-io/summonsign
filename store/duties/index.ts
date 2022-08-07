@@ -1,6 +1,7 @@
 import type { Duty, Settings } from '../../types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import refresh from './refresh'
+import refreshDuties from './refreshDuties'
+import { setSettings } from '../settings'
 
 const filterDuties = (duties: Duty[], settings: Settings) => {
   let filteredDuties = [...duties]
@@ -40,16 +41,16 @@ const dutiesSlice = createSlice({
   },
 
   extraReducers: builder => {
-    // builder.addCase(updateSettings, (state, { payload: settings }) => {
-    //   state.filteredDuties = filterDuties(state.duties, settings)
-    // })
+    builder.addCase(setSettings, (state, { payload: settings }) => {
+      state.filteredDuties = filterDuties(state.duties, settings)
+    })
 
-    // builder.addCase(refresh.fulfilled, (state, { payload: duties }) => {
-    //   state.duties = duties
-    //   state.filteredDuties = filterDuties(state.duties, settings)
-    // })
+    builder.addCase(refreshDuties.fulfilled, (state, { payload: { duties, settings } }) => {
+      state.duties = duties
+      state.filteredDuties = filterDuties(state.duties, settings)
+    })
   },
 })
 
 export default dutiesSlice
-export { refresh }
+export { refreshDuties }
