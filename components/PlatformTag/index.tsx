@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import type { Platform } from '../../types'
 
 type Props = {
@@ -14,10 +14,12 @@ const platformColorMap: Record<Platform, string> = {
   switch: 'text-red-400 border-red-700',
 }
 
-export default function PlatformTag({ platform, children }: Props) {
+function PlatformTag({ platform, children }: Props) {
   return (
     <span className={`self-start px-3 mr-4 border bg-gray-800 ${platformColorMap[platform]}`}>
       PC
     </span>
   )
 }
+
+export default memo(PlatformTag)
